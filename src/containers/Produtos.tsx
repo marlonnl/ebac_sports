@@ -2,6 +2,7 @@ import { Produto as ProdutoType } from '../App'
 import Produto from '../components/Produto'
 
 import * as S from './styles'
+import { useGetProdutosQuery } from '../services/api'
 
 type Props = {
   produtos: ProdutoType[]
@@ -23,10 +24,14 @@ const ProdutosComponent = ({
     return IdsDosFavoritos.includes(produtoId)
   }
 
+  const { data, isLoading } = useGetProdutosQuery()
+
+  if (isLoading) return <h2>Carregando produtos...</h2>
+
   return (
     <>
       <S.Produtos>
-        {produtos.map((produto) => (
+        {data?.map((produto) => (
           <Produto
             estaNosFavoritos={produtoEstaNosFavoritos(produto)}
             key={produto.id}
